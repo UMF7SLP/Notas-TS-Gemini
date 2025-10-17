@@ -1,0 +1,8 @@
+[build]
+  # Carpeta donde Netlify buscará los archivos estáticos (el index.html)
+  publish = "." 
+  command = "echo 'No build command needed'" 
+
+[functions]
+  # Indica dónde están las funciones Netlify
+  directory = "netlify/functions"
