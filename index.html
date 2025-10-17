@@ -32,28 +32,63 @@
         button:hover:not(:disabled) { background-color: #2980b9; }
         button:disabled { background-color: #95a5a6; cursor: not-allowed; }
         #estado { text-align: center; margin-bottom: 15px; color: #e74c3c; font-weight: bold; }
+        
+        /* Estilos del Login */
+        #login-screen { text-align: center; padding: 50px; border: 1px solid #ccc; border-radius: 8px; margin-top: 50px; background-color: white; }
+        #clave-acceso { padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; width: 80%; max-width: 300px; display: block; margin-left: auto; margin-right: auto;}
     </style>
 </head>
 <body>
-    <h1>✍️ Mejorador de Notas de Trabajo Social con Gemini</h1>
-    <p style="text-align: center; color: #555;">Pega tu nota de borrador, haz clic en el botón y obtén la versión con redacción mejorada sin perder información esencial.</p>
-
-    <div class="container">
-        <div class="column">
-            <h2>Nota Original (Borrador)</h2>
-            <textarea id="nota-original" placeholder="Pega aquí tu nota de trabajo social..."></textarea>
-        </div>
-        <div class="column">
-            <h2>Nota Mejorada por Gemini</h2>
-            <textarea id="nota-mejorada" readonly placeholder="El texto mejorado aparecerá aquí. Copia el resultado cuando esté listo."></textarea>
-        </div>
+    
+    <div id="login-screen">
+        <h2>Acceso Restringido</h2>
+        <p>Por favor, ingrese su clave de acceso:</p>
+        <input type="password" id="clave-acceso" placeholder="Contraseña">
+        <button id="boton-ingresar">Ingresar</button>
+        <p id="mensaje-error" style="color: red;"></p>
     </div>
-    
-    <div id="estado"></div>
-    
-    <button id="boton-mejorar">Mejorar Redacción con Gemini</button>
 
-    <script>
+    <div id="app-content" style="display:none;">
+
+        <h1>✍️ Mejorador de Notas de Trabajo Social con Gemini</h1>
+        <p style="text-align: center; color: #555;">Pega tu nota de borrador, haz clic en el botón y obtén la versión con redacción mejorada sin perder información esencial.</p>
+
+        <div class="container">
+            <div class="column">
+                <h2>Nota Original (Borrador)</h2>
+                <textarea id="nota-original" placeholder="Pega aquí tu nota de trabajo social..."></textarea>
+            </div>
+            <div class="column">
+                <h2>Nota Mejorada por Gemini</h2>
+                <textarea id="nota-mejorada" readonly placeholder="El texto mejorado aparecerá aquí. Copia el resultado cuando esté listo."></textarea>
+            </div>
+        </div>
+        
+        <div id="estado"></div>
+        
+        <button id="boton-mejorar">Mejorar Redacción con Gemini</button>
+
+    </div> <script>
+        // --- LÓGICA DE AUTENTICACIÓN SIMPLE ---
+        const CLAVE_SECRETA = "social2025"; // <-- ¡DEFINE TU CONTRASEÑA AQUÍ!
+
+        document.getElementById('boton-ingresar').addEventListener('click', () => {
+            const inputClave = document.getElementById('clave-acceso').value;
+            const errorMensaje = document.getElementById('mensaje-error');
+
+            if (inputClave === CLAVE_SECRETA) {
+                // Éxito: Ocultar login y mostrar aplicación
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('app-content').style.display = 'block';
+                errorMensaje.textContent = ""; 
+            } else {
+                // Fracaso
+                errorMensaje.textContent = "Contraseña incorrecta. Intente de nuevo.";
+                document.getElementById('clave-acceso').value = ''; // Limpiar campo
+            }
+        });
+
+        // --- LÓGICA EXISTENTE DEL BOTÓN 'Mejorar Redacción con Gemini' ---
         document.getElementById('boton-mejorar').addEventListener('click', async () => {
             const notaOriginal = document.getElementById('nota-original').value.trim();
             const boton = document.getElementById('boton-mejorar');
@@ -68,11 +103,10 @@
             // Deshabilitar botón e indicar proceso
             boton.disabled = true;
             estado.textContent = '✨ Mejorando redacción, por favor espera...';
-            notaMejoradaArea.value = ''; 
+            notaMejoradaArea.value = '';
 
             try {
                 // Llama al endpoint de Netlify Function
-                // Esta ruta llama a netlify/functions/mejorarNota.js
                 const response = await fetch('/.netlify/functions/mejorarNota', {
                     method: 'POST',
                     headers: {
