@@ -1,7 +1,9 @@
 [build]
   # Carpeta donde Netlify buscará los archivos estáticos (el index.html)
   publish = "." 
-  command = "echo 'No build command needed'" 
+  # CAMBIADO: Se fuerza la instalación de dependencias de Node.js (npm install)
+  # para que la funcion encuentre la librería de Gemini.
+  command = "npm install" 
 
 [functions]
   # Indica dónde están las funciones Netlify

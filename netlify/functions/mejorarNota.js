@@ -60,10 +60,6 @@ exports.handler = async (event) => {
         
         `;
         
-        // El resto del código que llama a la API sigue igual...
-        
-        Texto mejorado:`;
-        
         // 4. Llamar al modelo de Gemini
         const response = await ai.models.generateContent({
             model: 'gemini-2.5-flash',
