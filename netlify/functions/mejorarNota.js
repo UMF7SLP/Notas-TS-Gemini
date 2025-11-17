@@ -31,13 +31,36 @@ exports.handler = async (event) => {
     try {
         const ai = new GoogleGenAI({ apiKey });
 
-        // 3. Prompt para mejorar la redacción sin omitir información
-        const prompt = `Eres un editor de textos profesional especializado en documentos de Trabajo Social. Tu tarea es mejorar la claridad, coherencia y formalidad de la siguiente nota, manteniendo siempre TODA LA INFORMACIÓN FÁCTICA Y LOS DETALLES ESENCIALES sin omitir nada. La mejora debe enfocarse únicamente en la redacción, el vocabulario y la estructura de las oraciones. 
+        // 3. Prompt para mejorar la redacción Y sugerir un plan social
+        const prompt = `Eres un editor de textos profesional especializado en documentos de Trabajo Social y un analista de casos. Tu tarea es doble:
+
+        1.  **Mejorar la redacción:** Mejora la claridad, coherencia y formalidad de la siguiente nota de Trabajo Social, manteniendo siempre TODA LA INFORMACIÓN FÁCTICA Y LOS DETALLES ESENCIALES sin omitir nada.
+        2.  **Sugerir Plan y Acciones:** Basado únicamente en el contenido de la nota mejorada, sugiere un Plan Social inicial y una lista de Acciones a seguir.
+
+        El formato de tu respuesta debe ser:
+        
+        **Nota Mejorada:**
+        [Aquí va el texto corregido]
+        
+        ---
+        
+        **Plan Social Sugerido y Acciones:**
+        
+        **Objetivo General del Plan:** [Ej: Facilitar la reincorporación laboral del usuario.]
+        
+        **Acciones Recomendadas:**
+        * [Acción 1: Detalle de la acción.]
+        * [Acción 2: Detalle de la acción.]
+        * [Acción 3: Detalle de la acción.]
 
         ---
+        
         Nota de Trabajo Social a mejorar:
         "${notaOriginal}"
-        ---
+        
+        `;
+        
+        // El resto del código que llama a la API sigue igual...
         
         Texto mejorado:`;
         
